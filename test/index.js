@@ -42,11 +42,13 @@ describe('class', function() {
     assert.equal(C.name, 123);
   });
 
-  it('should reopen class', function() {
+  it('should extend the class and create a new instance', function() {
     var Person = Class.extend({
       name: 123
     });
-    console.log(Person.create);
+
+    var P = Person.create();
+    assert(P instanceof Person);
   });
 
 });
