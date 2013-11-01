@@ -86,7 +86,7 @@ describe('class', function() {
     assert.equal(P.hello(), 'hello');
   });
 
-  it.only('should call init', function() {
+  it('should call init', function() {
     var Parent = Class.extend({
       init: function() {
         return 'hello';
