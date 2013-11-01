@@ -4,6 +4,7 @@
 
 var makeCtor = require('./lib/ctor');
 var Mixin    = require('hydro-mixin');
+var Emitter  = require('emitter-component');
 
 /**
  * Create a CoreClass
@@ -12,40 +13,30 @@ var Mixin    = require('hydro-mixin');
 var CoreClass = makeCtor();
 
 /**
+ * Module exports
+ */
+
+exports = module.exports = CoreClass;
+
+/**
+ * Emitter
+ */
+
+Emitter(CoreClass);
+
+/**
+ * Prototype
+ */
+
+Emitter(CoreClass.prototype);
+
+/**
  * toString
  */
 
 CoreClass.toString = function() {
-  return 'CoreClass';
+  return '<CoreClass>';
 }
-
-/**
- * PrototypeMixin
- */
-
-CoreClass.PrototypeMixin = Mixin.create({
-
-  reopen: function() {
-    Mixin._apply(this, arguments, true);
-    return this;
-  },
-
-  init: function() {
-    console.log(1);
-  },
-
-  concatenatedProperties: null,
-
-  toString: function() {
-
-  }
-});
-
-/**
- * Owner Constructor
- */
-
-CoreClass.PrototypeMixin.ownerConstructor = CoreClass;
 
 /**
  * __super__
@@ -54,61 +45,64 @@ CoreClass.PrototypeMixin.ownerConstructor = CoreClass;
 CoreClass.__super__ = null;
 
 /**
- * Class Mixin
+ * PrototypeMixin (Prototype)
  */
 
-var ClassMixin = Mixin.create({
-  ClassMixin: true,
-  PrototypeMixin: CoreClass.PrototypeMixin,
-  isClass: true,
-  isMethod: false,
+CoreClass.PrototypeMixin = Mixin.create({
 
-  extend: function() {
-
-  },
-
-  createWithMixins: function() {
-
-  },
-
-  create: function()  {
-    var C = this;
-    if (arguments.length > 0) {
-      this._initProperties(arguments);
-    }
-    return new C();
-  },
+  init: function() {},
 
   reopen: function() {
-    this.willReopen();
-    Mixin._reopen.apply(this.PrototypeMixin, arguments);
-    return this;
-  },
-
-  reopenClass: function() {
-    Mixin._reopen.apply(this.ClassMixin, arguments);
-    Mixin._apply(this, arguments, false);
+    Mixin.reopen.apply(this.PrototypeMixin, arguments);
     return this;
   }
 
 });
 
 /**
- * Owner Constructor
+ * ClassMixin (Static)
  */
 
-ClassMixin.ownerConstructor = CoreClass;
+CoreClass.ClassMixin = Mixin.create({
+
+  extend: function() {
+    var Class = makeCtor(), proto;
+    Class.ClassMixin = Mixin.create(this.ClassMixin);
+    Class.PrototypeMixin = Mixin.create(this.PrototypeMixin);
+
+    Class.ClassMixin.ownerConstructor = Class;
+    Class.PrototypeMixin.ownerConstructor = Class;
+
+    Mixin.reopen.apply(Class.PrototypeMixin, arguments);
+
+    Class.superclass = this;
+    Class.__super__  = this.prototype;
+
+    proto = Class.prototype = Object.create(this.prototype);
+    proto.constructor = Class;
+    Class.ClassMixin.apply(Class);
+    return Class;
+  },
+
+  create: function() {
+    var C = this;
+    if (arguments.length>0) { this._initProperties(arguments); }
+    return new C();
+  },
+
+  reopen: function() {
+    Mixin.reopen.apply(this.PrototypeMixin, arguments);
+    return this;
+  },
+
+  reopenClass: function() {
+
+  }
+
+});
 
 /**
- * ClassMixin
+ * Apply the ClassMixin:
  */
 
-CoreClass.ClassMixin = ClassMixin;
-ClassMixin.apply(CoreClass);
-
-/**
- * Module exports
- */
-
-module.exports = CoreClass;
-
+CoreClass.ClassMixin.apply(CoreClass);

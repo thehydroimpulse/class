@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "author": "Daniel Fagnan <dnfagnan@gmail.com>",
   "dependencies": {
-    "underscore": "*"
+    "underscore": "*",
+    "emitter-component": "~1.0.1",
+    "tower-oid": "0.0.1"
   }
 }

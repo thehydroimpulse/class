@@ -7,34 +7,46 @@ describe('class', function() {
     assert.equal('function', typeof Class);
   });
 
-  it('should have an `extend` function', function() {
-    assert(typeof Class.extend == 'function');
+  it('should expose emitters', function() {
+    assert.equal('function', typeof Class.on);
+    assert.equal('function', typeof Class.emit);
+    assert.equal('function', typeof Class.once);
+
+    assert.equal('function', typeof Class.prototype.on);
+    assert.equal('function', typeof Class.prototype.emit);
+    assert.equal('function', typeof Class.prototype.once);
   });
 
-  it('should have a `create` function', function() {
-    assert(typeof Class.create == 'function');
+  it('should have a `extend` function (static)', function() {
+    assert.equal('function', typeof Class.extend);
   });
 
-  it('should have a `reopen` function', function() {
-    assert('function', typeof Class.reopen);
+  it('should have a `create function (static)', function() {
+    assert.equal('function', typeof Class.create);
   });
 
-  it('should have a `reopenClass` function', function() {
-    assert('function', typeof Class.reopenClass);
+  it('should have a `reopenClass` function (static)', function() {
+    assert.equal('function', typeof Class.reopenClass);
   });
 
-  it('should create a new class instance.', function() {
-    var initHasBeenCalled = false;
-    var instance = Class.create({
-      init: function() {
-        initHasBeenCalled = true;
-      }
+  it('should create a new instance', function() {
+    var C = Class.create();
+    assert(C instanceof Class);
+  });
+
+  it('should create a new instance (create) with init props', function() {
+    var C = Class.create({
+      name: 123
     });
+    assert(C instanceof Class);
+    assert.equal(C.name, 123);
+  });
 
-    console.log(instance);
-
-    assert(instance instanceof Class);
-    assert.equal(initHasBeenCalled, true);
+  it('should reopen class', function() {
+    var Person = Class.extend({
+      name: 123
+    });
+    console.log(Person.create);
   });
 
 });
