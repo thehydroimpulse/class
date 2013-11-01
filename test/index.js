@@ -75,4 +75,15 @@ describe('class', function() {
     assert.equal(initHasBeenCalled, true);
   });
 
+  it('should call a function', function() {
+    var Parent = Class.extend({
+      hello: function() {
+        return 'hello';
+      }
+    });
+
+    var P = Parent.create();
+    assert.equal(P.hello(), 'hello');
+  });
+
 });
