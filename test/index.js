@@ -49,6 +49,30 @@ describe('class', function() {
 
     var P = Person.create();
     assert(P instanceof Person);
+    assert.equal(P.name, 123);
+  });
+
+  it('should have an init method (proto)', function() {
+    var Person = Class.extend({
+      name: 123
+    });
+
+    var P = Person.create();
+    assert.equal('function', typeof P.init);
+  });
+
+  it('should fire off `class:init` event when calling `init` method', function() {
+    var initHasBeenCalled = false
+    var Person = Class.extend({});
+    var P = Person.create();
+
+    P.on('class:init', function(C) {
+      initHasBeenCalled = true;
+    });
+
+    P.init();
+
+    assert.equal(initHasBeenCalled, true);
   });
 
 });

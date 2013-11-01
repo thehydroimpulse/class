@@ -50,7 +50,9 @@ CoreClass.__super__ = null;
 
 CoreClass.PrototypeMixin = Mixin.create({
 
-  init: function() {},
+  init: function() {
+    this.emit('class:init', this);
+  },
 
   reopen: function() {
     Mixin.reopen.apply(this.PrototypeMixin, arguments);
