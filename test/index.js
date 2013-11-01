@@ -97,4 +97,24 @@ describe('class', function() {
     assert.equal(P.init(), 'hello');
   });
 
+  it('should call super init', function() {
+    var parentInitHasBeenCalled = false;
+
+    var Parent = Class.extend({
+      init: function() {
+        this._super();
+      }
+    });
+
+    var P = Parent.create();
+
+    P.on('class:init', function(C) {
+      parentInitHasBeenCalled = true;
+    });
+
+    P.init();
+
+    assert.equal(parentInitHasBeenCalled, true);
+  });
+
 });
