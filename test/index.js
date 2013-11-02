@@ -169,4 +169,26 @@ describe('class', function() {
     assert(A.world, 123);
   });
 
+  it('should extend a parent class and override `init`', function() {
+    var id = 0;
+
+    var App = Class.extend({
+      init: function() {
+        id++;
+        return this._super();
+      }
+    });
+
+    var Two = App.extend({
+      init: function() {
+        id++;
+        return this._super()
+      }
+    });
+
+    var T = Two.create();
+
+    assert.equal(id, 2);
+  });
+
 });
