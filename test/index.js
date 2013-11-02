@@ -163,6 +163,10 @@ describe('class', function() {
     assert(W instanceof App);
     assert(W instanceof Class);
 
+    assert(W.haha, 123);
+    assert(W.world, 123);
+
+    assert(A.world, 123);
   });
 
 });
