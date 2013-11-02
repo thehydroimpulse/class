@@ -18,32 +18,61 @@ var undefinedDescriptor = {
 
 
 /**
- * Make Ctor
+ * Create the constructor and setup the prototype
+ * object. This will go ahead and apply all the initial mixins
+ * and properties to the prototype and mixin the PrototypeMixin.
+ *
+ *
+ * @public
+ * @name makeCtor
+ * @return {Class}
  */
 
 function makeCtor() {
 
+  // Default variables.
   var wasApplied = false, initMixins, initProperties;
 
   var Class = function() {
+
+    /**
+     * Initialize the prototype property of this class. Only if
+     * it wasn't applied already.
+     */
+
     if (!wasApplied) {
       Class.proto();
     }
 
+    /**
+     * Define an empty `_super` property on the prototype.
+     */
+
     Object.defineProperty(this, '_super', undefinedDescriptor);
+
+    /**
+     * Apply any initial mixins that we may have.
+     */
 
     if (initMixins) {
       var mixins = initMixins;
       initMixins = null;
+      console.log(this);
       this.reopen.apply(this, mixins);
     }
+
+    /**
+     * Apply any initial properties that we may have.
+     */
 
     if (initProperties) {
       var props = Array.prototype.slice.call(initProperties);
       initProperties = null;
       for (var i = 0; i < props.length; i++) {
         var prop = props[i];
-        if ('object' === typeof prop && !(prop instanceof Array)) {
+        if (prop instanceof Mixin) {
+          //this.reopen.apply(this.PrototypeMixin, prop);
+        } else if ('object' === typeof prop && !(prop instanceof Array)) {
           for (var key in prop) {
             this[key] = prop[key];
           }
@@ -51,10 +80,34 @@ function makeCtor() {
       }
     }
 
+    // We're done with the main constructor, let's call a
+    // synthesised `init` function. The default `init` method
+    // is empty.
+
     this.init.apply(this, arguments);
   }
 
+  /**
+   * Apply the Mixin's toString function by default
+   *
+   * @name toString
+   * @public
+   * @proto
+   * @return {String}
+   */
+
   Class.toString = Mixin.prototype.toString;
+
+  /**
+   * Check if the class was already applied when we reopen it.
+   * If the PrototypeMixin was already applied to the prototype
+   * then re-create it.
+   *
+   * @name willReopen
+   * @public
+   * @static
+   * @return {Undefined}
+   */
 
   Class.willReopen = function() {
     if (wasApplied) {
@@ -64,13 +117,45 @@ function makeCtor() {
     wasApplied = false;
   };
 
+  /**
+   * Set the initial Mixins for the class.
+   *
+   * @name _initMixins
+   * @public
+   * @static
+   * @return {Undefined}
+   */
+
   Class._initMixins = function(args) {
     initMixins = args;
   };
 
+  /**
+   * Set the initial properties for the class.
+   *
+   * @name _initProperties
+   * @public
+   * @static
+   * @return {Undefined}
+   */
+
   Class._initProperties = function(args) {
     initProperties = args;
   };
+
+  /**
+   * Initialize the prototype for the class. This will setup
+   * the superclass' prototype object as well, if a superclass is
+   * present.
+   *
+   * It will also apply the PrototypeMixin to the class' prototype
+   * object and then return the prototype.
+   *
+   * @name proto
+   * @public
+   * @proto
+   * @return {Prototype} Class' Prototype
+   */
 
   Class.proto = function() {
     var superclass = Class.superclass;
@@ -86,21 +171,30 @@ function makeCtor() {
     return this.prototype;
   }
 
-
+  // Finally return the new constructor.
   return Class;
 }
 
 /**
- * Create a CoreClass
+ * Create a new constructor that will form the basis for all
+ * classes `CoreClass`.
+ *
+ * @return {Function} Class Constructor
  */
 
 var CoreClass = makeCtor();
 
 /**
- * Module exports
+ * Module exports.
  */
 
 exports = module.exports = CoreClass;
+
+/**
+ * Expose `Mixin`
+ */
+
+exports.Mixin = Mixin;
 
 /**
  * Emitter
@@ -177,14 +271,24 @@ CoreClass.ClassMixin = Mixin.create({
   },
 
   reopen: function() {
+    this.willReopen();
     Mixin.reopen.apply(this.PrototypeMixin, arguments);
     return this;
   },
 
   reopenClass: function() {
     Mixin.reopen.apply(this.ClassMixin, arguments);
-    Mixin.apply.apply(this, arguments);
+    Mixin.apply(this, arguments);
     return this;
+  },
+
+  detect: function(obj) {
+    if ('function' !== typeof obj) { return false; }
+    while(obj) {
+      if (obj===this) { return true; }
+      obj = obj.superclass;
+    }
+    return false;
   }
 
 });
