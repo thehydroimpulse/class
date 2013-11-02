@@ -191,7 +191,7 @@ var CoreClass = makeCtor();
 exports = module.exports = CoreClass;
 
 /**
- * Expose `Mixin`
+ * Expose `Mixin`.
  */
 
 exports.Mixin = Mixin;
@@ -217,20 +217,54 @@ CoreClass.toString = function() {
 }
 
 /**
- * __super__
+ * Create a default `__super__`. This is used to establish
+ * superclasses when extending another class.
+ *
+ * @static
+ * @type {null}
  */
 
 CoreClass.__super__ = null;
 
 /**
  * PrototypeMixin (Prototype)
+ *
+ * Create a new Mixin that will act as the prototype object.
+ * This will currently allow us to easily create new extending classes
+ * by working with these set Mixins.
+ *
+ * @property {Mixin} PrototypeMixin
+ * @static
+ * @return {Mixin}
  */
 
 CoreClass.PrototypeMixin = Mixin.create({
 
+  /**
+   * This is the default initialization method. This acts like a proxy
+   * constructor, where, after the constructor finalizes it's duties,
+   * this method will be called.
+   *
+   * A subclass will most likely override this method, which will be
+   * called, instead.
+   *
+   * @method init
+   * @proto
+   */
+
   init: function() {
     this.emit('class:init', this);
   },
+
+  /**
+   * `reopen` will reopen the prototype Mixin for new additions. This allows
+   * one to create whole classes in steps, rather than at once. This will
+   * reapply the PrototypeMixin.
+   *
+   * @method reopen
+   * @proto
+   * @return {Class}
+   */
 
   reopen: function() {
     Mixin.reopen.apply(this.PrototypeMixin, arguments);
@@ -240,7 +274,14 @@ CoreClass.PrototypeMixin = Mixin.create({
 });
 
 /**
- * ClassMixin (Static)
+ * ClassMixin (Static).
+ *
+ * Create a new static Mixin that will act as the static properties for the
+ * classes. This allows us to easily create new classes, and simply apply
+ * this Mixin. Resulting is higher code reuse.
+ *
+ * @property {Mixin} ClassMixin
+ * @return {Mixin}
  */
 
 CoreClass.ClassMixin = Mixin.create({
