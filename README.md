@@ -23,13 +23,13 @@ npm install hydro-class
 ## Usage
 
 ```js
-var Object = require('hydro-class');
+var Class = require('hydro-class');
 ```
 
 **Extending Classes**
 
 ```js
-var App = Object.extend({
+var App = Class.extend({
   // Prototype Properties...
   name: 'foo'
 });
@@ -42,7 +42,7 @@ before the instance is created (for that instance only)
 and add Mixins for that instance only.
 
 ```js
-var App = Object.extend({});
+var App = Class.extend({});
 var A   = App.create();
 // or...
 A = new App();
@@ -52,7 +52,7 @@ A = new App();
 
 ```js
 var count = 0;
-var App = Object.extend({
+var App = Class.extend({
   init: function() {
     this._super();
     count++;
@@ -71,7 +71,7 @@ When a new instance is created, `init` will be called on that instance. By defau
 This means you can treat `init` like a pretty constructor. This is where you'd do all your initializations.
 
 ```js
-var App = Object.extend({
+var App = Class.extend({
   init: function() {
     this.name = 'Foo';
     this.age  = 99;
@@ -90,7 +90,7 @@ However, you need to make sure that you call `this._super()` depending on the su
 **Reopening The Prototype**
 
 ```js
-var App = Object.extend({
+var App = Class.extend({
   name: 'fooPartial'
 });
 
@@ -106,7 +106,7 @@ A.name; // 'fooFull'
 **Reopening The Class (Static)**
 
 ```js
-var App = Object.extend({
+var App = Class.extend({
   someProtoProp: 123
 });
 
