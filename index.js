@@ -287,6 +287,7 @@ CoreClass.PrototypeMixin = Mixin.create({
 CoreClass.ClassMixin = Mixin.create({
 
   extend: function() {
+    //console.log(this.ClassMixin.mixins[0].mixins);
     var Class = makeCtor(), proto;
     Class.ClassMixin = Mixin.create(this.ClassMixin);
     Class.PrototypeMixin = Mixin.create(this.PrototypeMixin);

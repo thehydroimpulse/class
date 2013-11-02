@@ -130,4 +130,39 @@ describe('class', function() {
     assert.equal('function', typeof Two.create);
   });
 
+  it('should extend a class and create an instance of it.', function() {
+
+    var App = Class.extend({
+      hello: 123
+    });
+
+    var A = App.create();
+
+    assert(A instanceof Class);
+    assert(A.hello, 123);
+    assert(typeof A.create, 'undefined');
+    assert(typeof A.extend, 'undefined');
+    assert(typeof A.on, 'function');
+    assert(typeof A.emit, 'function');
+  });
+
+  it('should create two subclasses. (extending twice).', function() {
+
+    var App = Class.extend({
+      world: 123
+    });
+
+    var World = App.extend({
+      haha: 123
+    });
+
+    var A = App.create();
+    var W = World.create();
+
+    assert(A instanceof Class);
+    assert(W instanceof App);
+    assert(W instanceof Class);
+
+  });
+
 });
