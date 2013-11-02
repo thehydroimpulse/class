@@ -1,10 +1,32 @@
 {
   "name": "hydro-class",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "license": "MIT",
   "author": "Daniel Fagnan <dnfagnan@gmail.com>",
+  "keywords": [
+    "mixin",
+    "ember",
+    "class",
+    "class system",
+    "object system",
+    "js",
+    "class",
+    "simple",
+    "inherit",
+    "hydro"
+  ],
+  "description": "A powerful, full-featured class system for JavaScript.",
+  "contributors": [
+    {
+      "name": "Daniel Fagnan",
+      "email": "dnfagnan@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheHydroImpulse/class"
+  },
   "dependencies": {
-    "underscore": "*",
-    "emitter-component": "~1.0.1",
-    "tower-oid": "0.0.1"
+    "emitter-component": "~1.0.1"
   }
 }
