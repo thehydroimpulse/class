@@ -117,4 +117,17 @@ describe('class', function() {
     assert.equal(parentInitHasBeenCalled, true);
   });
 
+  it('should extend multiple classes', function() {
+
+    var App = Class.extend({});
+
+    assert.equal('function', typeof App.create);
+
+    var Two = App.extend({
+      name: 'Two'
+    });
+
+    assert.equal('function', typeof Two.create);
+  });
+
 });
