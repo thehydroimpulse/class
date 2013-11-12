@@ -156,7 +156,7 @@ console.log(obj); // { world: 123 }
 
 When you get into mixin multiple Mixins and objects, the last property added almost always wins. The logic differs when you apply mixins. The parameter to `.apply` is called the target, or base object. This object always has priority over other objects.
 
-When functions are involved, we always check whether the property already exists on the target object, and if it does, we create a function wrapper using [super-wrapper](https://www.github.com/TheHydroImpulse/super-wrapper). This will establish a new function that wraps the old one, and then sets up the `_super` property.
+When functions are involved, we always check whether the property already exists on the target object, and if it does, we create a function wrapper using [super-wrapper](https://www.github.com/TheHydroImpulse/super-wrap). This will establish a new function that wraps the old one, and then sets up the `_super` property.
 
 
 Any other primitive gets overwritten straight out. I may add concatenate properties (like Ember) in the future.
