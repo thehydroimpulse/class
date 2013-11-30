@@ -320,7 +320,9 @@ CoreClass.ClassMixin = Mixin.create({
 
   reopenClass: function() {
     Mixin.reopen.apply(this.ClassMixin, arguments);
-    Mixin.apply(this, arguments);
+    this.ClassMixin.apply(this);
+    //Mixin._apply(this, arguments);
+    //console.log(this, arguments);
     return this;
   },
 

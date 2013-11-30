@@ -191,4 +191,16 @@ describe('class', function() {
     assert.equal(id, 2);
   });
 
+  it('should reopen the static object', function() {
+    var App = Class.extend({});
+    App.reopenClass({
+      hello: function() {
+        return 123;
+      }
+    });
+
+    assert.equal('function', typeof App.hello);
+    assert.equal(App.hello(), 123);
+  });
+
 });
